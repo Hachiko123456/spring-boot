@@ -43,6 +43,7 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.util.Assert;
 
 /**
+ *
  * A container object which Binds objects from one or more
  * {@link ConfigurationPropertySource ConfigurationPropertySources}.
  *
@@ -55,16 +56,31 @@ public class Binder {
 	private static final Set<Class<?>> NON_BEAN_CLASSES = Collections
 			.unmodifiableSet(new HashSet<>(Arrays.asList(Object.class, Class.class)));
 
+	/**
+	 * 配置项
+	 */
 	private final Iterable<ConfigurationPropertySource> sources;
 
+	/**
+	 * 解析配置工具类
+	 */
 	private final PlaceholdersResolver placeholdersResolver;
 
+	/**
+	 * 数据转换器
+	 */
 	private final ConversionService conversionService;
 
 	private final Consumer<PropertyEditorRegistry> propertyEditorInitializer;
 
+	/**
+	 * 默认的数据绑定回调类
+	 */
 	private final BindHandler defaultBindHandler;
 
+	/**
+	 * 对象绑定类
+	 */
 	private final List<DataObjectBinder> dataObjectBinders;
 
 	/**
@@ -371,10 +387,12 @@ public class Binder {
 		if (property == null && containsNoDescendantOf(context.getSources(), name) && context.depth != 0) {
 			return null;
 		}
+		// 处理集合类型
 		AggregateBinder<?> aggregateBinder = getAggregateBinder(target, context);
 		if (aggregateBinder != null) {
 			return bindAggregate(name, target, handler, context, aggregateBinder);
 		}
+		// 如果在配置中找到了值，则进行属性绑定
 		if (property != null) {
 			try {
 				return bindProperty(target, context, property);
@@ -388,6 +406,7 @@ public class Binder {
 				throw ex;
 			}
 		}
+		// 处理对象
 		return bindDataObject(name, target, handler, context, allowRecursiveBinding);
 	}
 
@@ -431,7 +450,9 @@ public class Binder {
 	private <T> Object bindProperty(Bindable<T> target, Context context, ConfigurationProperty property) {
 		context.setConfigurationProperty(property);
 		Object result = property.getValue();
+		// 解析占位符
 		result = this.placeholdersResolver.resolvePlaceholders(result);
+		// 属性转换
 		result = context.getConverter().convert(result, target);
 		return result;
 	}
@@ -447,6 +468,7 @@ public class Binder {
 		}
 		DataObjectPropertyBinder propertyBinder = (propertyName, propertyTarget) -> bind(name.append(propertyName),
 				propertyTarget, handler, context, false, false);
+		// 解析对象
 		return context.withDataObject(type, () -> {
 			for (DataObjectBinder dataObjectBinder : this.dataObjectBinders) {
 				Object instance = dataObjectBinder.bind(name, target, context, propertyBinder);
@@ -512,18 +534,39 @@ public class Binder {
 	 */
 	final class Context implements BindContext {
 
+		/**
+		 * 数据转换器
+		 */
 		private final BindConverter converter;
 
+		/**
+		 * 绑定深度，每递归绑定一次深度+1，递归出来深度-1
+		 */
 		private int depth;
 
+		/**
+		 * 保存当前正在绑定的source
+		 */
 		private final List<ConfigurationPropertySource> source = Arrays.asList((ConfigurationPropertySource) null);
 
+		/**
+		 * 保存正在绑定的source
+		 */
 		private int sourcePushCount;
 
+		/**
+		 * 正在绑定的JAVA_BEAN类型
+		 */
 		private final Deque<Class<?>> dataObjectBindings = new ArrayDeque<>();
 
+		/**
+		 * 正在绑定的VALUE_OBJECT类型
+		 */
 		private final Deque<Class<?>> constructorBindings = new ArrayDeque<>();
 
+		/**
+		 * 正在绑定的key和value
+		 */
 		private ConfigurationProperty configurationProperty;
 
 		Context() {

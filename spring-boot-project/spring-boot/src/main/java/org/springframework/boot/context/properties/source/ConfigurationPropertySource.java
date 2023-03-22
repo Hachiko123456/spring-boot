@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 import org.springframework.boot.origin.OriginTrackedValue;
 
 /**
+ * 配置源，数据来源可以是properties、命令行参数、甚至是一个map
  * A source of {@link ConfigurationProperty ConfigurationProperties}.
  *
  * @author Phillip Webb

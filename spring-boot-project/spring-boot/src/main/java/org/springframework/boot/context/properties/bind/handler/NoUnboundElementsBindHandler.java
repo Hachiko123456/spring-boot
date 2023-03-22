@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.AbstractBindHandler;
 import org.springframework.boot.context.properties.bind.BindContext;
 import org.springframework.boot.context.properties.bind.BindHandler;
@@ -32,6 +33,7 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyS
 import org.springframework.boot.context.properties.source.IterableConfigurationPropertySource;
 
 /**
+ * 支持{@link ConfigurationProperties#ignoreUnknownFields()=false}，如果有不支持的属性时，直接抛出异常
  * {@link BindHandler} to enforce that all configuration properties under the root name
  * have been bound.
  *
@@ -41,8 +43,14 @@ import org.springframework.boot.context.properties.source.IterableConfigurationP
  */
 public class NoUnboundElementsBindHandler extends AbstractBindHandler {
 
+	/**
+	 * 记录绑定过的属性名
+	 */
 	private final Set<ConfigurationPropertyName> boundNames = new HashSet<>();
 
+	/**
+	 * 记录需要绑定的属性名
+	 */
 	private final Set<ConfigurationPropertyName> attemptedNames = new HashSet<>();
 
 	private final Function<ConfigurationPropertySource, Boolean> filter;

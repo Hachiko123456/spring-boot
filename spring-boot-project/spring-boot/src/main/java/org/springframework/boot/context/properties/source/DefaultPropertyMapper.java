@@ -46,6 +46,7 @@ final class DefaultPropertyMapper implements PropertyMapper {
 		if (last != null && last.isFrom(configurationPropertyName)) {
 			return last.getMapping();
 		}
+		// ConfigurationPropertyName.toString() -> ConfigurationPropertyName
 		String convertedName = configurationPropertyName.toString();
 		PropertyMapping[] mapping = { new PropertyMapping(convertedName, configurationPropertyName) };
 		this.lastMappedConfigurationPropertyName = new LastMapping<>(configurationPropertyName, mapping);

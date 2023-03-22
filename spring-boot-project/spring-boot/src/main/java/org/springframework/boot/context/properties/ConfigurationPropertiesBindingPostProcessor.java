@@ -98,6 +98,7 @@ public class ConfigurationPropertiesBindingPostProcessor
 	}
 
 	private void bind(ConfigurationPropertiesBean bean) {
+		// 不处理绑定类型为VALUE_OBJECT的bean
 		if (bean == null || hasBoundValueObject(bean.getName())) {
 			return;
 		}

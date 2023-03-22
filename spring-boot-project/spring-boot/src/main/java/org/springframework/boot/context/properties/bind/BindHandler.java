@@ -19,6 +19,7 @@ package org.springframework.boot.context.properties.bind;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 
 /**
+ * 对Bindable进行绑定的各个时期会回调的方法，并采用责任链设计模式，可以自由组合多个handler来实现功能
  * Callback interface that can be used to handle additional logic during element
  * {@link Binder binding}.
  *

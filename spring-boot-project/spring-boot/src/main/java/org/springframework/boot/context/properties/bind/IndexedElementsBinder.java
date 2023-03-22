@@ -78,11 +78,14 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 	private void bindIndexed(ConfigurationPropertySource source, ConfigurationPropertyName root, Bindable<?> target,
 			AggregateElementBinder elementBinder, IndexedCollectionSupplier collection, ResolvableType aggregateType,
 			ResolvableType elementType) {
+		// 根据属性获取值
 		ConfigurationProperty property = source.getConfigurationProperty(root);
+		// Collection类型
 		if (property != null) {
 			bindValue(target, collection.get(), aggregateType, elementType, property.getValue());
 		}
 		else {
+			// 数组类型
 			bindIndexed(source, root, elementBinder, collection, elementType);
 		}
 	}
@@ -92,8 +95,10 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 		if (value instanceof String && !StringUtils.hasText((String) value)) {
 			return;
 		}
+		// 转换为数组
 		Object aggregate = convert(value, aggregateType, target.getAnnotations());
 		ResolvableType collectionType = ResolvableType.forClassWithGenerics(collection.getClass(), elementType);
+		// 转为Collection类型
 		Collection<Object> elements = convert(aggregate, collectionType);
 		collection.addAll(elements);
 	}
@@ -101,8 +106,10 @@ abstract class IndexedElementsBinder<T> extends AggregateBinder<T> {
 	private void bindIndexed(ConfigurationPropertySource source, ConfigurationPropertyName root,
 			AggregateElementBinder elementBinder, IndexedCollectionSupplier collection, ResolvableType elementType) {
 		MultiValueMap<String, ConfigurationProperty> knownIndexedChildren = getKnownIndexedChildren(source, root);
+		// 认为root是一个数组，尝试遍历整个数组
 		for (int i = 0; i < Integer.MAX_VALUE; i++) {
 			ConfigurationPropertyName name = root.append((i != 0) ? "[" + i + "]" : INDEX_ZERO);
+			// 实际上调用的还是Binder#bind方法
 			Object value = elementBinder.bind(name, Bindable.of(elementType), source);
 			if (value == null) {
 				break;

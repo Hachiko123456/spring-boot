@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 代表{@link ConfigurationPropertySource}中的键值对
  * A single configuration property obtained from a {@link ConfigurationPropertySource}
  * consisting of a {@link #getName() name}, {@link #getValue() value} and optional
  * {@link #getOrigin() origin}.
@@ -34,10 +35,16 @@ import org.springframework.util.ObjectUtils;
  */
 public final class ConfigurationProperty implements OriginProvider, Comparable<ConfigurationProperty> {
 
+	/**
+	 * keyName
+	 */
 	private final ConfigurationPropertyName name;
 
 	private final Object value;
 
+	/**
+	 * 来源标记
+	 */
 	private final Origin origin;
 
 	public ConfigurationProperty(ConfigurationPropertyName name, Object value, Origin origin) {

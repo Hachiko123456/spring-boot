@@ -28,6 +28,9 @@ import org.springframework.util.Assert;
  */
 public abstract class AbstractBindHandler implements BindHandler {
 
+	/**
+	 * 责任链模式
+	 */
 	private final BindHandler parent;
 
 	/**

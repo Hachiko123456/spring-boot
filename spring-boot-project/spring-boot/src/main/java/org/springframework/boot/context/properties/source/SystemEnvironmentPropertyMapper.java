@@ -38,6 +38,7 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 
 	@Override
 	public PropertyMapping[] map(ConfigurationPropertyName configurationPropertyName) {
+		// 把变量名转大写，然后用_把每段拼接起来(驼峰、-、_、.等情况都在这一步处理了)
 		String name = convertName(configurationPropertyName);
 		String legacyName = convertLegacyName(configurationPropertyName);
 		if (name.equals(legacyName)) {
@@ -75,6 +76,7 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 			if (result.length() > 0) {
 				result.append("_");
 			}
+			// 把变量名称转大写
 			result.append(name.getElement(i, Form.UNIFORM).toUpperCase(Locale.ENGLISH));
 		}
 		return result.toString();
@@ -97,6 +99,7 @@ final class SystemEnvironmentPropertyMapper implements PropertyMapper {
 
 	private CharSequence processElementValue(CharSequence value) {
 		String result = value.toString().toLowerCase(Locale.ENGLISH);
+		// 如果是数字，则认为是数组的下标
 		return isNumber(result) ? "[" + result + "]" : result;
 	}
 

@@ -103,6 +103,12 @@ class ConfigurationPropertiesBinder {
 		return null;
 	}
 
+	/**
+	 * 组装BindHandler
+	 * @param target
+	 * @param annotation
+	 * @return org.springframework.boot.context.properties.bind.BindHandler
+	 **/
 	private <T> BindHandler getBindHandler(Bindable<T> target, ConfigurationProperties annotation) {
 		List<Validator> validators = getValidators(target);
 		BindHandler handler = new IgnoreTopLevelConverterNotFoundBindHandler();

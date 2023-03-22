@@ -25,6 +25,7 @@ import java.util.jar.Manifest;
 import org.springframework.boot.loader.Launcher;
 
 /**
+ * 归档文件，通常是一个tar/zip压缩包
  * An archive that can be launched by the {@link Launcher}.
  *
  * @author Phillip Webb
@@ -34,6 +35,7 @@ import org.springframework.boot.loader.Launcher;
 public interface Archive extends Iterable<Archive.Entry>, AutoCloseable {
 
 	/**
+	 * 当前jar包的路劲
 	 * Returns a URL that can be used to load the archive.
 	 * @return the archive URL
 	 * @throws MalformedURLException if the URL is malformed
@@ -48,6 +50,7 @@ public interface Archive extends Iterable<Archive.Entry>, AutoCloseable {
 	Manifest getManifest() throws IOException;
 
 	/**
+	 * 返回嵌套的jar包
 	 * Returns nested {@link Archive}s for entries that match the specified filter.
 	 * @param filter the filter used to limit entries
 	 * @return nested archives

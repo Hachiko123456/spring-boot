@@ -628,14 +628,29 @@ public final class ConfigurationPropertyName implements Comparable<Configuration
 
 		public static final Elements EMPTY = new Elements("", 0, NO_POSITION, NO_POSITION, NO_TYPE, null);
 
+		/**
+		 * 源字符串
+		 */
 		private final CharSequence source;
 
+		/**
+		 * ElementType个数
+ 		 */
 		private final int size;
 
+		/**
+		 * 每个ElementType的开始坐标
+		 */
 		private final int[] start;
 
+		/**
+		 * 每个ElementType的结束坐标
+		 */
 		private final int[] end;
 
+		/**
+		 * 解析后的ElementType数组
+		 */
 		private final ElementType[] type;
 
 		/**
@@ -925,32 +940,38 @@ public final class ConfigurationPropertyName implements Comparable<Configuration
 	private enum ElementType {
 
 		/**
+		 * 空的
 		 * The element is logically empty (contains no valid chars).
 		 */
 		EMPTY(false),
 
 		/**
+		 * 只有a-z、0-9，没有'-'
 		 * The element is a uniform name (a-z, 0-9, no dashes, lowercase).
 		 */
 		UNIFORM(false),
 
 		/**
+		 * 只是包含'-'
 		 * The element is almost uniform, but it contains (but does not start with) at
 		 * least one dash.
 		 */
 		DASHED(false),
 
 		/**
+		 * 可能存在大写
 		 * The element contains non uniform characters and will need to be converted.
 		 */
 		NON_UNIFORM(false),
 
 		/**
+		 * 存在非数字下标
 		 * The element is non-numerically indexed.
 		 */
 		INDEXED(true),
 
 		/**
+		 * 存在数字下标
 		 * The element is numerically indexed.
 		 */
 		NUMERICALLY_INDEXED(true);

@@ -19,6 +19,7 @@ package org.springframework.boot.context.properties.source;
 import org.springframework.core.env.PropertySource;
 
 /**
+ * 相当于Map<ConfigurationPropertyName,String>
  * Details a mapping between a {@link PropertySource} item and a
  * {@link ConfigurationPropertySource} item.
  *
@@ -28,6 +29,9 @@ import org.springframework.core.env.PropertySource;
  */
 class PropertyMapping {
 
+	/**
+	 * ConfigurationPropertyName转化成String后的值
+	 */
 	private final String propertySourceName;
 
 	private final ConfigurationPropertyName configurationPropertyName;

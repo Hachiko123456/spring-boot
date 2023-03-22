@@ -58,6 +58,9 @@ final class BindConverter {
 
 	private static BindConverter sharedInstance;
 
+	/**
+	 * 数据转换器
+	 */
 	private final ConversionService conversionService;
 
 	private BindConverter(ConversionService conversionService,
@@ -74,6 +77,7 @@ final class BindConverter {
 		services.add(new TypeConverterConversionService(propertyEditorInitializer));
 		services.add(conversionService);
 		if (!(conversionService instanceof ApplicationConversionService)) {
+			// 关键数据转换器，里面添加了各种各样的类型转换器
 			services.add(ApplicationConversionService.getSharedInstance());
 		}
 		return services;
@@ -208,6 +212,9 @@ final class BindConverter {
 	 */
 	private static class TypeConverterConverter implements ConditionalGenericConverter {
 
+		/**
+		 * 基础的数据转换器
+		 */
 		private final SimpleTypeConverter typeConverter;
 
 		TypeConverterConverter(SimpleTypeConverter typeConverter) {

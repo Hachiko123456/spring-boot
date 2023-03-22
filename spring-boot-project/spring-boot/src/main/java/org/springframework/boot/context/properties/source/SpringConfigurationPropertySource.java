@@ -80,7 +80,9 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 
 	@Override
 	public ConfigurationProperty getConfigurationProperty(ConfigurationPropertyName name) {
+		// 找出ConfigurationPropertyName->String的映射关系
 		PropertyMapping[] mappings = getMapper().map(name);
+		// 获取ConfigurationPropertyName对应的配置信息
 		return find(mappings, name);
 	}
 
@@ -107,13 +109,16 @@ class SpringConfigurationPropertySource implements ConfigurationPropertySource {
 	}
 
 	private ConfigurationProperty find(PropertyMapping mapping) {
+		// 获取ConfigurationPropertyName的String体现形式
 		String propertySourceName = mapping.getPropertySourceName();
+		// 获取key对应的配置信息
 		Object value = getPropertySource().getProperty(propertySourceName);
 		if (value == null) {
 			return null;
 		}
 		ConfigurationPropertyName configurationPropertyName = mapping.getConfigurationPropertyName();
 		Origin origin = PropertySourceOrigin.get(this.propertySource, propertySourceName);
+		// 封装成ConfigurationProperty
 		return ConfigurationProperty.of(configurationPropertyName, value, origin);
 	}
 

@@ -40,8 +40,11 @@ class ArrayBinder extends IndexedElementsBinder<Object> {
 	@Override
 	protected Object bindAggregate(ConfigurationPropertyName name, Bindable<?> target,
 			AggregateElementBinder elementBinder) {
+		// 结果数组
 		IndexedCollectionSupplier result = new IndexedCollectionSupplier(ArrayList::new);
+		// 数组类型
 		ResolvableType aggregateType = target.getType();
+		// 数组元素类型
 		ResolvableType elementType = target.getType().getComponentType();
 		bindIndexed(name, target, elementBinder, aggregateType, elementType, result);
 		if (result.wasSupplied()) {

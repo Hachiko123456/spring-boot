@@ -68,6 +68,7 @@ class SpringIterableConfigurationPropertySource extends SpringConfigurationPrope
 	@Override
 	public ConfigurationProperty getConfigurationProperty(ConfigurationPropertyName name) {
 		ConfigurationProperty configurationProperty = super.getConfigurationProperty(name);
+		// 如果通过正常的映射规则找不到配置，则将PropertySource里面的所有key转化成ConfigurationPropertyName，再进行查找
 		if (configurationProperty == null) {
 			configurationProperty = find(getPropertyMappings(getCache()), name);
 		}
@@ -112,8 +113,10 @@ class SpringIterableConfigurationPropertySource extends SpringConfigurationPrope
 		if (result != null) {
 			return result;
 		}
+		// 遍历全部配置
 		String[] names = getPropertySource().getPropertyNames();
 		List<PropertyMapping> mappings = new ArrayList<>(names.length * 2);
+		// 把配置的keyName转成ConfigurationPropertyName
 		for (String name : names) {
 			Collections.addAll(mappings, getMapper().map(name));
 		}

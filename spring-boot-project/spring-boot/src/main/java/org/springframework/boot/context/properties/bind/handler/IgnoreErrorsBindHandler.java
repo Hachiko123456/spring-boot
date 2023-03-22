@@ -16,6 +16,7 @@
 
 package org.springframework.boot.context.properties.bind.handler;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.AbstractBindHandler;
 import org.springframework.boot.context.properties.bind.BindContext;
 import org.springframework.boot.context.properties.bind.BindHandler;
@@ -23,6 +24,7 @@ import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 
 /**
+ * 支持{@link ConfigurationProperties#ignoreInvalidFields()==false}，当某个属性转换错误时吞掉异常直接返回null
  * {@link BindHandler} that can be used to ignore binding errors.
  *
  * @author Phillip Webb

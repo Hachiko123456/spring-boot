@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 一个能被绑定的source，这个类可以是一个类或者一个Field，可以脱离spring使用
  * Source that can be bound by a {@link Binder}.
  *
  * @param <T> the source type
@@ -42,12 +43,24 @@ public final class Bindable<T> {
 
 	private static final Annotation[] NO_ANNOTATIONS = {};
 
+	/**
+	 * 原始类型
+	 */
 	private final ResolvableType type;
 
+	/**
+	 * 解析后的真实类型
+	 */
 	private final ResolvableType boxedType;
 
+	/**
+	 * 类实例提供者
+	 */
 	private final Supplier<T> value;
 
+	/**
+	 * 类上的注解
+	 */
 	private final Annotation[] annotations;
 
 	private Bindable(ResolvableType type, ResolvableType boxedType, Supplier<T> value, Annotation[] annotations) {
@@ -250,6 +263,7 @@ public final class Bindable<T> {
 	private static ResolvableType box(ResolvableType type) {
 		Class<?> resolved = type.resolve();
 		if (resolved != null && resolved.isPrimitive()) {
+			// 为什么基础类型要通过数组去获取Class类型
 			Object array = Array.newInstance(resolved, 1);
 			Class<?> wrapperType = Array.get(array, 0).getClass();
 			return ResolvableType.forClass(wrapperType);

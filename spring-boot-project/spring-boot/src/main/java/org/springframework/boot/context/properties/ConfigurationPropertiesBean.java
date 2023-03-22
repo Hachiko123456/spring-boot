@@ -45,6 +45,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.annotation.Validated;
 
 /**
+ * 封装了一个需要绑定的bean，跟spring里面的bean是对应的
  * Provides access to {@link ConfigurationProperties @ConfigurationProperties} bean
  * details, regardless of if the annotation was used directly or on a {@link Bean @Bean}
  * factory method. This class can be used to access {@link #getAll(ApplicationContext)
@@ -59,14 +60,26 @@ import org.springframework.validation.annotation.Validated;
  */
 public final class ConfigurationPropertiesBean {
 
+	/**
+	 * bean的名称
+	 */
 	private final String name;
 
+	/**
+	 * bean的实例
+	 */
 	private final Object instance;
 
 	private final ConfigurationProperties annotation;
 
+	/**
+	 * 绑定的实例
+	 */
 	private final Bindable<?> bindTarget;
 
+	/**
+	 * 绑定的类型，一般都是JAVA_BEAN类型
+	 */
 	private final BindMethod bindMethod;
 
 	private ConfigurationPropertiesBean(String name, Object instance, ConfigurationProperties annotation,
@@ -197,6 +210,7 @@ public final class ConfigurationPropertiesBean {
 	 * {@link ConfigurationProperties @ConfigurationProperties}
 	 */
 	public static ConfigurationPropertiesBean get(ApplicationContext applicationContext, Object bean, String beanName) {
+		// 获取工厂方法
 		Method factoryMethod = findFactoryMethod(applicationContext, beanName);
 		return create(beanName, bean, bean.getClass(), factoryMethod);
 	}
@@ -261,6 +275,7 @@ public final class ConfigurationPropertiesBean {
 		Validated validated = findAnnotation(instance, type, factory, Validated.class);
 		Annotation[] annotations = (validated != null) ? new Annotation[] { annotation, validated }
 				: new Annotation[] { annotation };
+		// 获取绑定类型
 		ResolvableType bindType = (factory != null) ? ResolvableType.forMethodReturnType(factory)
 				: ResolvableType.forClass(type);
 		Bindable<Object> bindTarget = Bindable.of(bindType).withAnnotations(annotations);

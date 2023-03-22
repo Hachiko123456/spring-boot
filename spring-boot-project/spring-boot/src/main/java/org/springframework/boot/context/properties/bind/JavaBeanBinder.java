@@ -48,10 +48,12 @@ class JavaBeanBinder implements DataObjectBinder {
 	public <T> T bind(ConfigurationPropertyName name, Bindable<T> target, Context context,
 			DataObjectPropertyBinder propertyBinder) {
 		boolean hasKnownBindableProperties = target.getValue() != null && hasKnownBindableProperties(name, context);
+		// 获取实例对应的属性和方法
 		Bean<T> bean = Bean.get(target, hasKnownBindableProperties);
 		if (bean == null) {
 			return null;
 		}
+		// 获取实例
 		BeanSupplier<T> beanSupplier = bean.getSupplier(target);
 		boolean bound = bind(propertyBinder, bean, beanSupplier);
 		return (bound ? beanSupplier.get() : null);
@@ -83,16 +85,20 @@ class JavaBeanBinder implements DataObjectBinder {
 
 	private <T> boolean bind(BeanSupplier<T> beanSupplier, DataObjectPropertyBinder propertyBinder,
 			BeanProperty property) {
+		// 属性名
 		String propertyName = property.getName();
+		// 属性的类型
 		ResolvableType type = property.getType();
 		Supplier<Object> value = property.getValue(beanSupplier);
 		Annotation[] annotations = property.getAnnotations();
+		// 实际上调的还是Binder#bind方法去解析属性
 		Object bound = propertyBinder.bindProperty(propertyName,
 				Bindable.of(type).withSuppliedValue(value).withAnnotations(annotations));
 		if (bound == null) {
 			return false;
 		}
 		if (property.isSettable()) {
+			// 调用setter方法赋值
 			property.setValue(beanSupplier, bound);
 		}
 		else if (value == null || !bound.equals(value.get())) {
@@ -273,6 +279,7 @@ class JavaBeanBinder implements DataObjectBinder {
 		private Field field;
 
 		BeanProperty(String name, ResolvableType declaringClassType) {
+			// 把驼峰命名方式改成-，例如resolvableType=resolvable-type
 			this.name = DataObjectPropertyName.toDashedForm(name);
 			this.declaringClassType = declaringClassType;
 		}

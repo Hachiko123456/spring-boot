@@ -49,6 +49,7 @@ class OnClassCondition extends FilteringSpringBootCondition {
 		// Split the work and perform half in a background thread if more than one
 		// processor is available. Using a single additional thread seems to offer the
 		// best performance. More threads make things worse.
+		// 如果处理器大于1个，则用多线程处理
 		if (Runtime.getRuntime().availableProcessors() > 1) {
 			return resolveOutcomesThreaded(autoConfigurationClasses, autoConfigurationMetadata);
 		}
@@ -90,13 +91,16 @@ class OnClassCondition extends FilteringSpringBootCondition {
 	public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
 		ClassLoader classLoader = context.getClassLoader();
 		ConditionMessage matchMessage = ConditionMessage.empty();
+		// 获取类名
 		List<String> onClasses = getCandidates(metadata, ConditionalOnClass.class);
 		if (onClasses != null) {
 			List<String> missing = filter(onClasses, ClassNameFilter.MISSING, classLoader);
+			// 如果有缺失的类，直接返回不匹配
 			if (!missing.isEmpty()) {
 				return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnClass.class)
 						.didNotFind("required class", "required classes").items(Style.QUOTE, missing));
 			}
+			// 拼接条件
 			matchMessage = matchMessage.andCondition(ConditionalOnClass.class)
 					.found("required class", "required classes")
 					.items(Style.QUOTE, filter(onClasses, ClassNameFilter.PRESENT, classLoader));
@@ -108,10 +112,12 @@ class OnClassCondition extends FilteringSpringBootCondition {
 				return ConditionOutcome.noMatch(ConditionMessage.forCondition(ConditionalOnMissingClass.class)
 						.found("unwanted class", "unwanted classes").items(Style.QUOTE, present));
 			}
+			// 拼接条件
 			matchMessage = matchMessage.andCondition(ConditionalOnMissingClass.class)
 					.didNotFind("unwanted class", "unwanted classes")
 					.items(Style.QUOTE, filter(onMissingClasses, ClassNameFilter.MISSING, classLoader));
 		}
+		// 返回匹配
 		return ConditionOutcome.match(matchMessage);
 	}
 
@@ -166,14 +172,19 @@ class OnClassCondition extends FilteringSpringBootCondition {
 
 	private final class StandardOutcomesResolver implements OutcomesResolver {
 
+		// 配置类集合
 		private final String[] autoConfigurationClasses;
 
+		// 开始索引
 		private final int start;
 
+		// 结束索引
 		private final int end;
 
+		// 配置类注解元数据
 		private final AutoConfigurationMetadata autoConfigurationMetadata;
 
+		// 类加载器
 		private final ClassLoader beanClassLoader;
 
 		private StandardOutcomesResolver(String[] autoConfigurationClasses, int start, int end,

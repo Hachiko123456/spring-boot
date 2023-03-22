@@ -23,6 +23,7 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyN
 import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
 
 /**
+ * 数组、集合、Map属性的工具
  * Internal strategy used by {@link Binder} to bind aggregates (Maps, Lists, Arrays).
  *
  * @param <T> the type being bound

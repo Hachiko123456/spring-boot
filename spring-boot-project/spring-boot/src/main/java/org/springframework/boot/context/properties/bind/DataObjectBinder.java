@@ -20,6 +20,7 @@ import org.springframework.boot.context.properties.bind.Binder.Context;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 
 /**
+ * 对象绑定
  * Internal strategy used by {@link Binder} to bind data objects. A data object is an
  * object composed itself of recursively bound properties.
  *

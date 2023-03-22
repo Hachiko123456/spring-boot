@@ -34,6 +34,7 @@ import org.springframework.validation.AbstractBindingResult;
 import org.springframework.validation.Validator;
 
 /**
+ * 支持绑定时对属性值的验证
  * {@link BindHandler} to apply {@link Validator Validators} to bound results.
  *
  * @author Phillip Webb
